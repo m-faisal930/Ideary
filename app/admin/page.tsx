@@ -206,7 +206,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8 font-sans">
-    
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -229,6 +228,7 @@ export default function AdminDashboard() {
           description={`${stats.publishedBlogs} published, ${stats.draftBlogs} drafts`}
           trend={5}
           icon={<FileText className="h-4 w-4 text-muted-foreground" />}
+          isLoading={isLoading}
         />
 
         <MetricCard
@@ -237,6 +237,7 @@ export default function AdminDashboard() {
           description="Across all published posts"
           trend={12}
           icon={<Eye className="h-4 w-4 text-muted-foreground" />}
+          isLoading={isLoading}
         />
 
         <MetricCard
@@ -245,6 +246,7 @@ export default function AdminDashboard() {
           description="Reader engagement rate"
           trend={8}
           icon={<Users className="h-4 w-4 text-muted-foreground" />}
+          isLoading={isLoading}
         />
 
         <MetricCard
@@ -253,6 +255,7 @@ export default function AdminDashboard() {
           description="Total reading time created"
           trend={15}
           icon={<Clock className="h-4 w-4 text-muted-foreground" />}
+          isLoading={isLoading}
         />
       </div>
 
@@ -411,9 +414,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-
-
-      
     </div>
   );
 }

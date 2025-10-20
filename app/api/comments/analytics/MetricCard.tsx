@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MetricCardProps {
   title: string;
@@ -10,10 +11,26 @@ interface MetricCardProps {
   description: string;
   trend?: number;
   icon: React.ReactNode;
+  isLoading?: boolean;
 }
 
-export default function MetricCard({ title, value, description, trend, icon }: MetricCardProps) {
+export default function MetricCard({ title, value, description, trend, icon, isLoading }: MetricCardProps) {
+      if (isLoading) {
+    return (
+      <Card className="p-4">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <Skeleton className="h-4 w-24" /> {/* title placeholder */}
+          <Skeleton className="h-5 w-5 rounded-full" /> {/* icon placeholder */}
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-8 w-20 mb-2" /> {/* value placeholder */}
+          <Skeleton className="h-3 w-32" /> {/* description placeholder */}
+        </CardContent>
+      </Card>
+    );
+  }
   return (
+
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -172,34 +173,76 @@ export default function AdminBlogsPage() {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Total Blogs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Published</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {stats.published}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Drafts</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-600">
-              {stats.drafts}
-            </div>
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <Card className="p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <Skeleton className="h-4 w-24" /> {/* title placeholder */}
+              <Skeleton className="h-5 w-5 rounded-full" />{" "}
+              {/* icon placeholder */}
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-8 w-20 mb-2" /> {/* value placeholder */}
+              <Skeleton className="h-3 w-32" /> {/* description placeholder */}
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium">Total Blogs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.total}</div>
+            </CardContent>
+          </Card>
+        )}
+        {isLoading ? (
+          <Card className="p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <Skeleton className="h-4 w-24" /> {/* title placeholder */}
+              <Skeleton className="h-5 w-5 rounded-full" />{" "}
+              {/* icon placeholder */}
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-8 w-20 mb-2" /> {/* value placeholder */}
+              <Skeleton className="h-3 w-32" /> {/* description placeholder */}
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium">Published</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">
+                {stats.published}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        {isLoading ? (
+          <Card className="p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <Skeleton className="h-4 w-24" /> {/* title placeholder */}
+              <Skeleton className="h-5 w-5 rounded-full" />{" "}
+              {/* icon placeholder */}
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-8 w-20 mb-2" /> {/* value placeholder */}
+              <Skeleton className="h-3 w-32" /> {/* description placeholder */}
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium">Drafts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-orange-600">
+                {stats.drafts}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
       <BlogFilters availableTags={availableTags} />
       <div className="space-y-6">
@@ -211,7 +254,7 @@ export default function AdminBlogsPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {blogs.map((blog) => (
               <motion.div
-              key={blog._id}
+                key={blog._id}
                 whileHover={{ scale: 1.03 }}
                 className="transition-all"
               >
@@ -244,7 +287,6 @@ export default function AdminBlogsPage() {
                               size="icon"
                               className="h-8 w-8 cursor-pointer"
                             >
-                            
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
