@@ -96,6 +96,7 @@ export default function BlogDetailPage() {
     }
   }, [params.slug]);
 
+
   const handleShare = async (platform: string) => {
     if (!blog) return;
     const url = encodeURIComponent(window.location.href);
@@ -207,16 +208,18 @@ export default function BlogDetailPage() {
 
             <Separator />
           </header>
-
-          <div
+          {/* <div
             className="prose prose-lg max-w-none leading-relaxed"
             style={{ whiteSpace: "pre-wrap" }}
           >
             {blog.content}
-          </div>
+          </div> */}
 
+          <div
+            className="prose prose-lg max-w-none leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
           <Comments blogId={blog._id} />
-
           <footer className="mt-12 pt-6 border-t flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
             <div className="flex flex-col items-start sm:items-end w-full">
               <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
