@@ -16,9 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { RichTextEditor } from "@/components/blog/RichTextEditor"; // Add this import
+import { RichTextEditor } from "@/components/blog/RichTextEditor";
+import { GenerateBlogModal } from "@/components/blog/GenerateBlogModal";
 
 const blogFormSchema = z.object({
   title: z
@@ -55,6 +56,7 @@ export function BlogForm({
 }: BlogFormProps) {
   const [tags, setTags] = useState<string[]>(initialData?.tags || []);
   const [newTag, setNewTag] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     register,
@@ -113,13 +115,53 @@ export function BlogForm({
     await onSubmit({ ...data, tags });
   };
 
+  const handleAIGenerate = (data: {
+    title: string;
+    description: string;
+    content: string;
+    tags: string[];
+  }) => {
+
+    setValue("title", data.title);
+    setValue("content", data.content);
+    setValue("excerpt", data.description);
+    setValue("metaDescription", data.description.slice(0, 160));
+    
+
+    const newTags = data.tags.slice(0, 10);
+    setTags(newTags);
+    setValue("tags", newTags);
+    
+
+    trigger();
+  };
+
   return (
-    <Card className="max-w-8xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl">
-          {initialData ? "Edit Blog Post" : "Create New Blog Post"}
-        </CardTitle>
-      </CardHeader>
+    <>
+      <GenerateBlogModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onGenerate={handleAIGenerate}
+      />
+      
+      <Card className="max-w-8xl mx-auto">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-2xl">
+              {initialData ? "Edit Blog Post" : "Create New Blog Post"}
+            </CardTitle>
+            <Button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              variant="outline"
+              className="gap-2"
+              disabled={isLoading}
+            >
+              <Sparkles className="h-4 w-4" />
+              Generate with AI
+            </Button>
+          </div>
+        </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
           <div className="flex flex-col md:flex-row w-full">
@@ -165,7 +207,7 @@ export function BlogForm({
                   <p className="text-sm text-destructive">
                     {errors.excerpt.message}
                   </p>
-                )}
+                )}f
               </div>
 
               <div className="space-y-4 mt-6">
@@ -268,5 +310,6 @@ export function BlogForm({
         </form>
       </CardContent>
     </Card>
+    </>
   );
 }
