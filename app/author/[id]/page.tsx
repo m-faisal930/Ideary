@@ -112,7 +112,7 @@ export default function AuthorProfilePage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-8">
+        <main className="flex-1 container mx-auto px-4 py-8 mt-30">
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-start gap-6">
