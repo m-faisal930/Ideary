@@ -121,17 +121,14 @@ export function BlogForm({
     content: string;
     tags: string[];
   }) => {
-
     setValue("title", data.title);
     setValue("content", data.content);
     setValue("excerpt", data.description);
     setValue("metaDescription", data.description.slice(0, 160));
-    
 
     const newTags = data.tags.slice(0, 10);
     setTags(newTags);
     setValue("tags", newTags);
-    
 
     trigger();
   };
@@ -143,7 +140,7 @@ export function BlogForm({
         onClose={() => setIsModalOpen(false)}
         onGenerate={handleAIGenerate}
       />
-      
+
       <Card className="max-w-8xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -162,154 +159,154 @@ export function BlogForm({
             </Button>
           </div>
         </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-          <div className="flex flex-col md:flex-row w-full">
-            
-            <div className="md:flex-[2]  p-4">
-              <div className="space-y-4 mt-6">
-                <Label htmlFor="title">Title *</Label>
-                <Input
-                  id="title"
-                  {...register("title")}
-                  placeholder="Enter blog title..."
-                  className={errors.title ? "border-destructive" : ""}
-                />
-                {errors.title && (
-                  <p className="text-sm text-destructive">
-                    {errors.title.message}
-                  </p>
-                )}
-              </div>
-              <div className="space-y-4 mt-6">
-                <Label htmlFor="content">Content *</Label>
-                <RichTextEditor
-                  value={contentValue}
-                  onChange={handleContentChange}
-                  error={errors.content?.message}
-                  placeholder="Write your blog content here..."
-                />
-              </div>
-            </div>
-
-
-            <div className="md:flex-[1] p-4">
-              <div className="space-y-4 mt-6">
-                <Label htmlFor="excerpt">Excerpt</Label>
-                <Textarea
-                  id="excerpt"
-                  {...register("excerpt")}
-                  placeholder="Brief description of your blog post..."
-                  rows={3}
-                  className={errors.excerpt ? "border-destructive" : ""}
-                />
-                {errors.excerpt && (
-                  <p className="text-sm text-destructive">
-                    {errors.excerpt.message}
-                  </p>
-                )}f
-              </div>
-
-              <div className="space-y-4 mt-6">
-                <Label htmlFor="metaDescription">Meta Description</Label>
-                <Textarea
-                  id="metaDescription"
-                  {...register("metaDescription")}
-                  placeholder="SEO meta description..."
-                  rows={2}
-                  className={errors.metaDescription ? "border-destructive" : ""}
-                />
-                {errors.metaDescription && (
-                  <p className="text-sm text-destructive">
-                    {errors.metaDescription.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-4 mt-6">
-                <Label>Tags</Label>
-                <div className="flex gap-2">
+        <CardContent>
+          <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+            <div className="flex flex-col md:flex-row w-full">
+              <div className="md:flex-[2]  p-4">
+                <div className="space-y-4 mt-6">
+                  <Label htmlFor="title">Title *</Label>
                   <Input
-                    value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Add a tag..."
-                    className="flex-1"
+                    id="title"
+                    {...register("title")}
+                    placeholder="Enter blog title..."
+                    className={errors.title ? "border-destructive" : ""}
                   />
-                  <Button type="button" onClick={addTag} variant="outline">
-                    <Plus className="h-4 w-4" />
-                  </Button>
+                  {errors.title && (
+                    <p className="text-sm text-destructive">
+                      {errors.title.message}
+                    </p>
+                  )}
                 </div>
-                {tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="secondary"
-                        className="flex items-center gap-1"
-                      >
-                        {tag}
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="h-auto p-0 hover:bg-transparent"
-                          onClick={() => removeTag(tag)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </Badge>
-                    ))}
+                <div className="space-y-4 mt-6">
+                  <Label htmlFor="content">Content *</Label>
+                  <RichTextEditor
+                    value={contentValue}
+                    onChange={handleContentChange}
+                    error={errors.content?.message}
+                    placeholder="Write your blog content here..."
+                  />
+                </div>
+              </div>
+
+              <div className="md:flex-[1] p-4">
+                <div className="space-y-4 mt-6">
+                  <Label htmlFor="excerpt">Excerpt</Label>
+                  <Textarea
+                    id="excerpt"
+                    {...register("excerpt")}
+                    placeholder="Brief description of your blog post..."
+                    rows={3}
+                    className={errors.excerpt ? "border-destructive" : ""}
+                  />
+                  {errors.excerpt && (
+                    <p className="text-sm text-destructive">
+                      {errors.excerpt.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-4 mt-6">
+                  <Label htmlFor="metaDescription">Meta Description</Label>
+                  <Textarea
+                    id="metaDescription"
+                    {...register("metaDescription")}
+                    placeholder="SEO meta description..."
+                    rows={2}
+                    className={
+                      errors.metaDescription ? "border-destructive" : ""
+                    }
+                  />
+                  {errors.metaDescription && (
+                    <p className="text-sm text-destructive">
+                      {errors.metaDescription.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-4 mt-6">
+                  <Label>Tags</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Add a tag..."
+                      className="flex-1"
+                    />
+                    <Button type="button" onClick={addTag} variant="outline">
+                      <Plus className="h-4 w-4" />
+                    </Button>
                   </div>
-                )}
-                {errors.tags && (
-                  <p className="text-sm text-destructive">
-                    {errors.tags.message}
-                  </p>
-                )}
-              </div>
+                  {tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {tag}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-auto p-0 hover:bg-transparent"
+                            onClick={() => removeTag(tag)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                  {errors.tags && (
+                    <p className="text-sm text-destructive">
+                      {errors.tags.message}
+                    </p>
+                  )}
+                </div>
 
-              <div className="space-y-4 mt-6">
-                <Label>Status</Label>
-                <Select
-                  defaultValue={initialData?.status || "draft"}
-                  onValueChange={(value) =>
-                    setValue("status", value as "draft" | "published")
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex gap-4 pt-6">
-                <Button type="submit" disabled={isLoading} className="flex-1">
-                  {isLoading ? "Saving..." : submitText}
-                </Button>
-                {watchedStatus === "draft" && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setValue("status", "published");
-                      handleSubmit(onFormSubmit)();
-                    }}
-                    disabled={isLoading}
+                <div className="space-y-4 mt-6">
+                  <Label>Status</Label>
+                  <Select
+                    defaultValue={initialData?.status || "draft"}
+                    onValueChange={(value) =>
+                      setValue("status", value as "draft" | "published")
+                    }
                   >
-                    {isLoading ? "Publishing..." : "Save & Publish"}
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex gap-4 pt-6">
+                  <Button type="submit" disabled={isLoading} className="flex-1">
+                    {isLoading ? "Saving..." : submitText}
                   </Button>
-                )}
+                  {watchedStatus === "draft" && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setValue("status", "published");
+                        handleSubmit(onFormSubmit)();
+                      }}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Publishing..." : "Save & Publish"}
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+          </form>
+        </CardContent>
+      </Card>
     </>
   );
 }
