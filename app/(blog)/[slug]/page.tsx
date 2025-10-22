@@ -208,12 +208,6 @@ export default function BlogDetailPage() {
 
             <Separator />
           </header>
-          {/* <div
-            className="prose prose-lg max-w-none leading-relaxed"
-            style={{ whiteSpace: "pre-wrap" }}
-          >
-            {blog.content}
-          </div> */}
 
           <div
             className="prose prose-lg max-w-none leading-relaxed"
