@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function POST(request: NextRequest) {
   try {
-
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(
         { message: "Gemini API key is not configured" },
@@ -14,10 +12,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-
     const body = await request.json();
     const { prompt } = body;
-
 
     if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0) {
       return NextResponse.json(
@@ -25,7 +21,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
 
     const structuredPrompt = `
 You are a professional blog writer. Based on the following user request, generate a complete blog post in JSON format.
@@ -49,35 +44,31 @@ Important:
 - Ensure all JSON is properly escaped and valid
 `;
 
-
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const result = await model.generateContent(structuredPrompt);
     const response = result.response;
     const text = response.text();
 
-
     let generatedData;
     try {
-
       const cleanedText = text
         .replace(/```json\n?/g, "")
         .replace(/```\n?/g, "")
         .trim();
-      
+
       generatedData = JSON.parse(cleanedText);
     } catch (parseError) {
       console.error("Failed to parse AI response:", text);
       return NextResponse.json(
-        { 
+        {
           message: "Failed to parse AI response. Please try again.",
-          details: parseError instanceof Error ? parseError.message : "Unknown error"
+          details:
+            parseError instanceof Error ? parseError.message : "Unknown error",
         },
         { status: 500 }
       );
     }
-
 
     if (
       !generatedData.title ||
@@ -89,7 +80,6 @@ Important:
         { status: 500 }
       );
     }
-
 
     const blogData = {
       title: String(generatedData.title).slice(0, 200),
@@ -107,7 +97,6 @@ Important:
   } catch (error) {
     console.error("Error generating blog with Gemini:", error);
 
-
     if (error instanceof Error) {
       if (error.message.includes("API key")) {
         return NextResponse.json(
@@ -115,7 +104,10 @@ Important:
           { status: 500 }
         );
       }
-      if (error.message.includes("quota") || error.message.includes("rate limit")) {
+      if (
+        error.message.includes("quota") ||
+        error.message.includes("rate limit")
+      ) {
         return NextResponse.json(
           { message: "API quota exceeded. Please try again later." },
           { status: 429 }
@@ -124,9 +116,10 @@ Important:
     }
 
     return NextResponse.json(
-      { 
-        message: "An error occurred while generating the blog. Please try again.",
-        details: error instanceof Error ? error.message : "Unknown error"
+      {
+        message:
+          "An error occurred while generating the blog. Please try again.",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );
