@@ -104,11 +104,11 @@ BlogSchema.pre("save", function (next) {
       .replace(/[^a-z0-9\s]/g, "")
       .replace(/\s+/g, "-")
       .replace(/^-+|-+$/g, "");
-    
+
     if (!baseSlug) {
       baseSlug = "blog-post";
     }
-    
+
     if (this.isNew) {
       this.slug = `${baseSlug}-${Date.now()}`;
     } else {
@@ -123,8 +123,6 @@ BlogSchema.pre("save", function (next) {
       this.publishedAt = undefined;
     }
   }
-
-  
   if (!this.excerpt && this.content) {
     this.excerpt = this.content.substring(0, 200).replace(/\s+$/, "") + "...";
   }
@@ -155,4 +153,5 @@ BlogSchema.statics.findBySlug = function (slug: string) {
   return this.findOne({ slug }).populate("author", "username email");
 };
 
-export default mongoose.models.Blog || mongoose.model<IBlog>("Blog", BlogSchema);
+export default mongoose.models.Blog ||
+  mongoose.model<IBlog>("Blog", BlogSchema);
