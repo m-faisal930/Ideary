@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { X, Plus, Sparkles } from "lucide-react";
+import { X, Plus, Sparkles, Link } from "lucide-react";
 import { useState } from "react";
 import { RichTextEditor } from "@/components/blog/RichTextEditor";
 import { GenerateBlogModal } from "@/components/blog/GenerateBlogModal";
@@ -151,7 +151,7 @@ export function BlogForm({
               type="button"
               onClick={() => setIsModalOpen(true)}
               variant="outline"
-              className="gap-2"
+              className="gap-2 hover:cursor-pointer"
               disabled={isLoading}
             >
               <Sparkles className="h-4 w-4" />
@@ -162,7 +162,7 @@ export function BlogForm({
         <CardContent>
           <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
             <div className="flex flex-col md:flex-row w-full">
-              <div className="md:flex-[2]  p-4">
+              <div className="md:flex-[2]  py-4 pr-4">
                 <div className="space-y-4 mt-6">
                   <Label htmlFor="title">Title *</Label>
                   <Input
@@ -188,7 +188,7 @@ export function BlogForm({
                 </div>
               </div>
 
-              <div className="md:flex-[1] p-4">
+              <div className="md:flex-[1] py-4 pl-4">
                 <div className="space-y-4 mt-6">
                   <Label htmlFor="excerpt">Excerpt</Label>
                   <Textarea
@@ -243,9 +243,10 @@ export function BlogForm({
                         <Badge
                           key={tag}
                           variant="secondary"
-                          className="flex items-center gap-1"
+                          className="flex items-center gap-1 pl-5"
                         >
                           {tag}
+
                           <Button
                             type="button"
                             variant="ghost"
@@ -285,13 +286,18 @@ export function BlogForm({
                 </div>
 
                 <div className="flex gap-4 pt-6">
-                  <Button type="submit" disabled={isLoading} className="flex-1">
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 hover:cursor-pointer"
+                  >
                     {isLoading ? "Saving..." : submitText}
                   </Button>
                   {watchedStatus === "draft" && (
                     <Button
                       type="button"
                       variant="outline"
+                      className="hover:cursor-pointer"
                       onClick={() => {
                         setValue("status", "published");
                         handleSubmit(onFormSubmit)();
