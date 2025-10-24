@@ -221,7 +221,8 @@ export default function AdminDashboard() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 ">
+        <div className="hover:shadow-lg bg-muted/10">
         <MetricCard
           title="Total Blogs"
           value={stats.totalBlogs}
@@ -229,8 +230,9 @@ export default function AdminDashboard() {
           trend={5}
           icon={<FileText className="h-4 w-4 text-muted-foreground" />}
           isLoading={isLoading}
-        />
-
+          />
+          </div>
+        <div className="hover:shadow-lg bg-muted/10">
         <MetricCard
           title="Total Views"
           value={performanceMetrics.totalViews.toLocaleString()}
@@ -239,7 +241,8 @@ export default function AdminDashboard() {
           icon={<Eye className="h-4 w-4 text-muted-foreground" />}
           isLoading={isLoading}
         />
-
+        </div>
+        <div className="hover:shadow-lg bg-muted/10">
         <MetricCard
           title="Avg. Engagement"
           value={`${performanceMetrics.engagementRate}%`}
@@ -248,7 +251,8 @@ export default function AdminDashboard() {
           icon={<Users className="h-4 w-4 text-muted-foreground" />}
           isLoading={isLoading}
         />
-
+</div>
+        <div className="hover:shadow-lg  bg-muted/10">
         <MetricCard
           title="Content Value"
           value={`${performanceMetrics.totalReadingTime}h`}
@@ -257,6 +261,7 @@ export default function AdminDashboard() {
           icon={<Clock className="h-4 w-4 text-muted-foreground" />}
           isLoading={isLoading}
         />
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
