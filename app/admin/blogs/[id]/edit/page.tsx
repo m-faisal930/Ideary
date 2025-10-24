@@ -125,7 +125,6 @@ export default function EditBlogPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/blogs">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Blogs
             </Link>
           </Button>
           <div>
@@ -149,7 +148,6 @@ export default function EditBlogPage() {
         <Button variant="ghost" asChild>
           <Link href="/admin/blogs">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Blogs
           </Link>
         </Button>
         <div>
