@@ -26,7 +26,7 @@ const Hero = () => {
                   <ul className="flex flex-wrap items-center">
                     <li>
                       <Link
-                        href="/signup"
+                        href="/admin/blogs/new"
                         className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-center text-base font-medium text-white hover:bg-blue-dark lg:px-7"
                       >
                         Start Writing
