@@ -25,7 +25,6 @@ export default function Header() {
     });
   };
 
-
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -69,7 +68,6 @@ export default function Header() {
             </Link>
           </div>
 
-
           <div className="flex w-full items-center justify-between px-4">
             <div>
               <button
@@ -94,7 +92,7 @@ export default function Header() {
                   <li>
                     <Link
                       href="/"
-                      className={`flex py-2 text-base font-medium text-dark hover:text-primary lg:ml-10 lg:inline-flex dark:text-white ${
+                      className={`flex py-2 text-base font-medium text-dark hover:text-primary hover:underline lg:ml-10 lg:inline-flex dark:text-white ${
                         pathname === "/" ? "underline" : ""
                       }`}
                     >
@@ -104,7 +102,7 @@ export default function Header() {
                   <li>
                     <Link
                       href="/posts"
-                      className={`flex py-2 text-base font-medium text-dark hover:text-primary lg:ml-10 lg:inline-flex dark:text-white ${
+                      className={`flex py-2 text-base font-medium text-dark hover:text-primary hover:underline lg:ml-10 lg:inline-flex dark:text-white ${
                         pathname === "/posts" ? "underline" : ""
                       }`}
                     >
@@ -114,7 +112,7 @@ export default function Header() {
                   <li>
                     <Link
                       href="/about"
-                      className={`flex py-2 text-base font-medium text-dark hover:text-primary lg:ml-10 lg:inline-flex dark:text-white ${
+                      className={`flex py-2 text-base font-medium text-dark hover:text-primary hover:underline lg:ml-10 lg:inline-flex dark:text-white ${
                         pathname === "/about" ? "underline" : ""
                       }`}
                     >
@@ -124,7 +122,6 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-
 
             <div className="hidden justify-end pr-16 sm:flex lg:pr-0">
               {user ? (
