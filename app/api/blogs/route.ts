@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Blog from "@/models/Blog";
-import { apiResponse } from "../../../utils/apiResponse"
+import { apiResponse } from "../../../utils/apiResponse";
 import { authenticateUser } from "@/utils/AuthMiddleware";
 import {
   createBlogSchema,
@@ -52,7 +52,11 @@ export async function GET(req: NextRequest) {
       if (authError) return authError;
 
       if (!user) {
-        return apiResponse({ success: false, message: "Authentication required", status: 401 });
+        return apiResponse({
+          success: false,
+          message: "Authentication required",
+          status: 401,
+        });
       }
 
       filter.author = user.id;
@@ -143,10 +147,18 @@ export async function GET(req: NextRequest) {
       availableTags: Array.isArray(allTags) ? allTags : [],
     };
 
-    return apiResponse({ success: true, message: "Blogs retrieved successfully", data: responseData });
+    return apiResponse({
+      success: true,
+      message: "Blogs retrieved successfully",
+      data: responseData,
+    });
   } catch (error) {
     console.error("Failed to retrieve blogs", error);
-    return apiResponse({ success: false, message: "Failed to retrieve blogs", status: 500 });
+    return apiResponse({
+      success: false,
+      message: "Failed to retrieve blogs",
+      status: 500,
+    });
   }
 }
 
@@ -156,7 +168,11 @@ export async function POST(req: NextRequest) {
     if (authError) return authError;
 
     if (!user) {
-      return apiResponse({ success: false, message: "Authentication required", status: 401 });
+      return apiResponse({
+        success: false,
+        message: "Authentication required",
+        status: 401,
+      });
     }
 
     const body = await req.json();
@@ -167,7 +183,12 @@ export async function POST(req: NextRequest) {
     } = validateBlogData(createBlogSchema, body);
 
     if (!success) {
-      return apiResponse({ success: false, message: "Validation failed", status: 400, errors: errors || ["Invalid blog data"] });
+      return apiResponse({
+        success: false,
+        message: "Validation failed",
+        status: 400,
+        errors: errors || ["Invalid blog data"],
+      });
     }
 
     await connectDB();
@@ -181,7 +202,12 @@ export async function POST(req: NextRequest) {
 
     await blog.populate("author", "username email");
 
-    return apiResponse({ success: true, message: "Blog created successfully", data: { blog }, status: 201 });
+    return apiResponse({
+      success: true,
+      message: "Blog created successfully",
+      data: { blog },
+      status: 201,
+    });
   } catch (error) {
     if (
       typeof error === "object" &&
@@ -191,10 +217,18 @@ export async function POST(req: NextRequest) {
       "keyPattern" in error &&
       (error.keyPattern as Record<string, unknown>)?.slug
     ) {
-      return apiResponse({ success: false, message: "A blog with a similar title already exists", status: 409 });
+      return apiResponse({
+        success: false,
+        message: "A blog with a similar title already exists",
+        status: 409,
+      });
     }
 
     console.error("Failed to create blog", error);
-    return apiResponse({ success: false, message: "Failed to create blog", status: 500 });
+    return apiResponse({
+      success: false,
+      message: "Failed to create blog",
+      status: 500,
+    });
   }
 }
