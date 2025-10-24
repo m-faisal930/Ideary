@@ -150,7 +150,7 @@ export default function AdminCommentsPage() {
         <>
           <div className="grid gap-4">
             {comments.map((comment) => (
-              <Card key={comment._id}>
+              <Card key={comment._id} className="hover:shadow-lg hover:bg-muted/10">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">
@@ -183,7 +183,7 @@ export default function AdminCommentsPage() {
                     <Button
                       variant="link"
                       size="sm"
-                      className="p-0 h-auto"
+                      className="p-0 h-auto cursor-pointer"
                       onClick={() =>
                         window.open(`/${comment.blog.slug}`, "_blank")
                       }
