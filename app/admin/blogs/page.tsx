@@ -186,8 +186,8 @@ export default function AdminBlogsPage() {
             </CardContent>
           </Card>
         ) : (
-          <Card>
-            <CardHeader className="pb-3">
+          <Card className="hover:shadow-lg hover:bg-muted/10">
+            <CardHeader className="pb-3 ">
               <CardTitle className="text-sm font-medium">Total Blogs</CardTitle>
             </CardHeader>
             <CardContent>
@@ -208,7 +208,7 @@ export default function AdminBlogsPage() {
             </CardContent>
           </Card>
         ) : (
-          <Card>
+          <Card className="hover:shadow-lg hover:bg-muted/10">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium">Published</CardTitle>
             </CardHeader>
@@ -232,7 +232,7 @@ export default function AdminBlogsPage() {
             </CardContent>
           </Card>
         ) : (
-          <Card>
+          <Card className="hover:shadow-lg hover:bg-muted/10">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium">Drafts</CardTitle>
             </CardHeader>
@@ -264,7 +264,7 @@ export default function AdminBlogsPage() {
                       <Link
                         href={`/${blog.slug}`}
                         target="_blank"
-                        className="text-lg font-semibold line-clamp-2 leading-tight hover:text-primary transition-colors"
+                        className="text-lg font-semibold line-clamp-2 leading-tight hover:text-primary hover:underline transition-colors"
                       >
                         {blog.title}
                       </Link>
