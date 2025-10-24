@@ -88,7 +88,7 @@ export function AdminSidebar() {
       <SidebarHeader className="">
         <div className="flex items-center gap-2">
           <Link href={"/"}>
-            <Image src="/logo.png" alt="logo" width={200} height={150} />
+            <Image src="/logo.png" alt="logo" width={150} height={50} />
           </Link>
         </div>
       </SidebarHeader>
@@ -96,9 +96,7 @@ export function AdminSidebar() {
       <SidebarContent className="px-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-
-            </SidebarMenuButton>
+            <SidebarMenuButton asChild></SidebarMenuButton>
           </SidebarMenuItem>
 
           {navigation.map((item) => (
