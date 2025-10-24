@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MessageSquare, Send, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  MessageSquare,
+  Send,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { toast } from "react-toastify";
 import { formatSafeDate } from "@/utils/DateUtils";
 import { useAuth } from "@/context/AuthContext";
@@ -96,7 +102,7 @@ export function Comments({ blogId }: CommentsProps) {
       } else {
         toast.error(data.message || "Failed to add comment");
       }
-    } catch  {
+    } catch {
       toast.error("An error occurred while adding comment");
     } finally {
       setIsSubmitting(false);
@@ -137,6 +143,7 @@ export function Comments({ blogId }: CommentsProps) {
           <Button
             variant="ghost"
             size="sm"
+            className="curosor-pointer"
             onClick={() => setShowComments(!showComments)}
           >
             {showComments ? (
@@ -170,7 +177,11 @@ export function Comments({ blogId }: CommentsProps) {
                 <span className="text-sm text-muted-foreground">
                   {newComment.length}/1000
                 </span>
-                <Button type="submit" disabled={isSubmitting || !newComment.trim()}>
+                <Button
+                  type="submit"
+                  className="cursor-pointer"
+                  disabled={isSubmitting || !newComment.trim()}
+                >
                   <Send className="h-4 w-4 mr-2" />
                   {isSubmitting ? "Posting..." : "Post Comment"}
                 </Button>
@@ -227,7 +238,9 @@ export function Comments({ blogId }: CommentsProps) {
                         </Button>
                       )}
                     </div>
-                    <p className="text-sm whitespace-pre-wrap">{comment.content}</p>
+                    <p className="text-sm whitespace-pre-wrap">
+                      {comment.content}
+                    </p>
                   </CardContent>
                 </Card>
               ))
