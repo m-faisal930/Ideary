@@ -53,7 +53,7 @@ export function AdminHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full ">
                   <User className="h-4 w-4" />
                 </div>
               </Button>
@@ -67,7 +67,7 @@ export function AdminHeader() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/profile">
+                <Link href="/admin/profile">
                   <User className="mr-2 h-4 w-4" />
                   Profile
                 </Link>
