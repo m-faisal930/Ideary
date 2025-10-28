@@ -6,13 +6,10 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
-
-
-
   const authRoutes = ["/login", "/signup"];
 
-  if (pathname.startsWith("/admin")) {
 
+  if (pathname.startsWith("/admin") || pathname.startsWith("/author")) {
     if (!token) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
@@ -20,7 +17,6 @@ export function middleware(req: NextRequest) {
     try {
       jwt.verify(token, process.env.JWT_SECRET!);
     } catch {
-
       const res = NextResponse.redirect(new URL("/login", req.url));
       res.cookies.delete("token");
       return res;
@@ -33,21 +29,19 @@ export function middleware(req: NextRequest) {
       jwt.verify(token, process.env.JWT_SECRET!);
       return NextResponse.redirect(new URL("/", req.url));
     } catch {
-
       const res = NextResponse.next();
       res.cookies.delete("token");
       return res;
     }
   }
 
-
   return NextResponse.next();
 }
-
 
 export const config = {
   matcher: [
     "/admin/:path*",
+    "/author/:path*",
     "/login",       
     "/signup",       
   ],
