@@ -50,7 +50,8 @@ export default function Login() {
           transition: Bounce,
         });
         setUser(data.data.user);
-        router.push("/");
+
+        data.data.user.role == "author" ? router.push("/author") : router.push("/admin");
       } else {
         toast.error(data.error || data.message || "Login failed");
       }
