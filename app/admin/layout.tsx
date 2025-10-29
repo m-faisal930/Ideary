@@ -22,6 +22,11 @@ export default function AdminLayout({
       if (!user) {
         router.push("/login");
       } else {
+
+        if (!user.role || user.role !== "admin") {
+          console.log("User is not admin, but allowing access for setup");
+
+        }
         setIsCheckingAuth(false);
       }
     }
@@ -31,7 +36,7 @@ export default function AdminLayout({
     return (
       <div className="min-h-screen bg-background">
         <div className="flex">
-          {/* Sidebar Skeleton */}
+
           <div className="w-64 border-r bg-card p-4">
             <div className="space-y-4">
               <Skeleton className="h-8 w-32" />
@@ -55,6 +60,7 @@ export default function AdminLayout({
       </div>
     );
   }
+
 
   if (!user) {
     return null;
