@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email},
       process.env.JWT_SECRET!,
       {
         expiresIn: "24h",
@@ -44,7 +44,8 @@ export async function POST(req: Request) {
     const userData = { 
       id: user._id, 
       email: user.email, 
-      username: user.username 
+      username: user.username,
+      role: user.role || "author"
     };
 
   const response = apiResponse({ success: true, message: "Login successful", data: { user: userData } });
