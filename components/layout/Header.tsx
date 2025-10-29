@@ -127,7 +127,7 @@ export default function Header() {
               {user ? (
                 <>
                   <Button asChild>
-                    <Link href="/admin/blogs/new">
+                    <Link href="/author/blogs/new">
                       <PenSquare className="h-4 w-4 mr-2" />
                       Write
                     </Link>
