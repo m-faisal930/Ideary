@@ -20,12 +20,15 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
   LayoutDashboard,
+  Users,
   FileText,
+  MessageSquare,
   Settings,
   User,
   LogOut,
   ChevronRight,
-  MessageSquare,
+  BarChart3,
+  Shield,
 } from "lucide-react";
 import {
   Collapsible,
@@ -41,16 +44,34 @@ const navigation = [
     icon: LayoutDashboard,
   },
   {
-    title: "Blogs",
+    title: "Authors",
+    icon: Users,
+    items: [
+      {
+        title: "All Authors",
+        href: "/admin/authors",
+      },
+      {
+        title: "Add Author",
+        href: "/admin/authors/new",
+      },
+    ],
+  },
+  {
+    title: "Content",
     icon: FileText,
     items: [
       {
-        title: "All Blogs",
-        href: "/admin/blogs",
+        title: "All Posts",
+        href: "/admin/posts",
       },
       {
-        title: "Create New",
-        href: "/admin/blogs/new",
+        title: "Drafts",
+        href: "/admin/posts/drafts",
+      },
+      {
+        title: "Published",
+        href: "/admin/posts/published",
       },
     ],
   },
@@ -60,16 +81,30 @@ const navigation = [
     icon: MessageSquare,
   },
   {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
+    title: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
+  },
+  {
+    title: "System",
+    icon: Shield,
+    items: [
+      {
+        title: "Settings",
+        href: "/admin/system/settings",
+      },
+      {
+        title: "Permissions",
+        href: "/admin/system/permissions",
+      },
+    ],
   },
 ];
 
 export function AdminSidebar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
-  const [openItems, setOpenItems] = useState<string[]>(["Blogs"]);
+  const [openItems, setOpenItems] = useState<string[]>(["Authors", "Content"]);
 
   const toggleItem = (title: string) => {
     setOpenItems((prev) =>
