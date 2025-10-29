@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import { connectDB } from "@/lib/mongoose";
+import User from "@/models/User";
 import { apiResponse } from "../../../../utils/apiResponse";
 
 export async function GET(req: Request) {
@@ -21,10 +23,30 @@ export async function GET(req: Request) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as MyJwtPayload;
+    
+    // Fetch user from database to get complete info including role
+    await connectDB();
+    const user = await User.findById(decoded.id).select("-password");
+    
+    if (!user) {
+      return apiResponse({
+        success: true,
+        message: "User not found",
+        data: { user: null },
+      });
+    }
+
     return apiResponse({
       success: true,
       message: "User authenticated",
-      data: { user: { id: decoded.id, email: decoded.email } },
+      data: { 
+        user: { 
+          id: user._id, 
+          email: user.email, 
+          username: user.username,
+          role: user.role || "author"
+        } 
+      },
     });
   } catch {
     return apiResponse({
