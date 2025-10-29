@@ -1,130 +1,119 @@
-import { NextRequest } from "next/server";
-import { connectDB } from "@/lib/mongoose";
-import Comment from "@/models/Comment";
-import { apiResponse } from "../../../../utils/apiResponse";
-import { authenticateUser } from "@/utils/AuthMiddleware";
+import { NextRequest, NextResponse } from 'next/server';
+import { connectDB } from '@/lib/mongoose';
+import Comment from '@/models/Comment';
+import User from '@/models/User';
+import { verifyToken } from '@/utils/verifyToken';
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const { user, error: authError } = await authenticateUser(req);
-    if (authError) {
-      return authError;
-    }
-
-    if (!user) {
-      return apiResponse({
-        success: false,
-        message: "Authentication required",
-        status: 401
-      });
-    }
-
-    const url = new URL(req.url);
-    const page = parseInt(url.searchParams.get("page") || "1");
-    const limit = parseInt(url.searchParams.get("limit") || "20");
-    const skip = (page - 1) * limit;
-
     await connectDB();
 
-    const [comments, totalCount] = await Promise.all([
-      Comment.find()
-        .populate("author", "username email")
-        .populate("blog", "title slug")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      Comment.countDocuments(),
-    ]);
 
-    const transformedComments = comments.map(comment => ({
-      _id: comment._id,
-      content: comment.content,
-      author: {
-        _id: comment.author._id,
-        username: comment.author.username || "Unknown",
-        email: comment.author.email || ""
-      },
-      blog: {
-        _id: comment.blog._id,
-        title: comment.blog.title,
-        slug: comment.blog.slug
-      },
-      createdAt: comment.createdAt,
-      updatedAt: comment.updatedAt
-    }));
+    const UserModel = User;
+    const CommentModel = Comment;
 
-    const totalPages = Math.ceil(totalCount / limit);
 
-    return apiResponse({
+    const token = request.cookies.get('token')?.value;
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded.payload || decoded.tokenError) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const currentUser = await UserModel.findById(decoded.payload.id);
+    if (!currentUser || currentUser.role !== 'admin') {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const search = searchParams.get('search') || '';
+
+    const skip = (page - 1) * limit;
+
+
+    const query: Record<string, unknown> = {};
+    
+    if (search) {
+      query.content = { $regex: search, $options: 'i' };
+    }
+
+
+    const comments = await CommentModel.find(query)
+      .populate('author', 'name email')
+      .populate('blog', 'title slug')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const total = await CommentModel.countDocuments(query);
+
+    return NextResponse.json({
       success: true,
-      message: "Comments retrieved successfully",
-      data: {
-        comments: transformedComments,
-        pagination: {
-          totalComments: totalCount,
-          totalPages,
-          page,
-          limit
-        }
-      }
+      comments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
     });
-  } catch  {
-    return apiResponse({
-      success: false,
-      message: "Failed to retrieve comments",
-      status: 500
-    });
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(request: NextRequest) {
   try {
-    const { user, error: authError } = await authenticateUser(req);
-    if (authError) {
-      return authError;
-    }
-
-    if (!user) {
-      return apiResponse({
-        success: false,
-        message: "Authentication required",
-        status: 401
-      });
-    }
-
-    const body = await req.json();
-    const commentId = body.id;
-
-    if (!commentId) {
-      return apiResponse({
-        success: false,
-        message: "Comment ID is required",
-        status: 400
-      });
-    }
-
     await connectDB();
 
-    const comment = await Comment.findByIdAndDelete(commentId);
 
-    if (!comment) {
-      return apiResponse({
-        success: false,
-        message: "Comment not found",
-        status: 404
-      });
+    const UserModel = User;
+    const CommentModel = Comment;
+
+
+    const token = request.cookies.get('token')?.value;
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    return apiResponse({
+    const decoded = verifyToken(token);
+    if (!decoded.payload || decoded.tokenError) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const currentUser = await UserModel.findById(decoded.payload.id);
+    if (!currentUser || currentUser.role !== 'admin') {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
+
+    const { commentIds } = await request.json();
+
+    if (!commentIds || !Array.isArray(commentIds)) {
+      return NextResponse.json({ error: 'Comment IDs are required' }, { status: 400 });
+    }
+
+    const result = await CommentModel.deleteMany({ _id: { $in: commentIds } });
+
+    return NextResponse.json({
       success: true,
-      message: "Comment deleted successfully"
+      message: `${result.deletedCount} comments deleted successfully`,
+      deletedCount: result.deletedCount,
     });
-  } catch {
-    return apiResponse({
-      success: false,
-      message: "Failed to delete comment",
-      status: 500
-    });
+  } catch (error) {
+    console.error('Error deleting comments:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
