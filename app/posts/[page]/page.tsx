@@ -52,36 +52,74 @@ interface BlogsResponse {
 const blogsPerPage = 9;
 
 function getBaseUrl() {
-  if (process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_APP_URL) {
+  if (process.env.NEXT_PUBLIC_APP_URL) {
     return process.env.NEXT_PUBLIC_APP_URL;
   }
+  
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+
   return "http://127.0.0.1:3000";
 }
 
+async function fetchBlogs(searchParams: URLSearchParams) {
+  const baseUrl = getBaseUrl();
+  
+
+  console.log('Environment check:', {
+    NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    VERCEL_URL: process.env.VERCEL_URL,
+    baseUrl: baseUrl
+  });
+  
+  try {
+    const url = `${baseUrl}/api/blogs?${searchParams.toString()}`;
+    console.log('Fetching from URL:', url);
+    
+    const res = await fetch(url, {
+      next: { revalidate: 300 },
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (!res.ok) {
+      console.error(`API request failed: ${res.status} ${res.statusText}`);
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data: BlogsResponse = await res.json();
+    console.log('API response success:', data.success);
+    return data;
+  } catch (err) {
+    console.error("Error in fetchBlogs:", err);
+    throw err;
+  }
+}
+
 export async function generateStaticParams() {
-  if (process.env.NODE_ENV === "production" || !process.env.NEXT_PUBLIC_APP_URL) {
+  if (process.env.NODE_ENV === "production" && !process.env.VERCEL_URL) {
+    // Generate static pages for the first 10 pages during build
     return Array.from({ length: 10 }, (_, i) => ({ page: String(i + 1) }));
   }
 
   try {
-    const res = await fetch(
-      `${getBaseUrl()}/api/blogs?status=published&page=1&limit=${blogsPerPage}`,
-      {
-        cache: 'no-store' 
-      }
-    );
+    const apiParams = new URLSearchParams();
+    apiParams.set("status", "published");
+    apiParams.set("page", "1");
+    apiParams.set("limit", blogsPerPage.toString());
     
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    
-    const data: BlogsResponse = await res.json();
+    const data = await fetchBlogs(apiParams);
     const totalPages = data?.data?.totalPages ?? 1;
 
-    return Array.from({ length: totalPages }, (_, i) => ({ page: String(i + 1) }));
+    return Array.from({ length: Math.min(totalPages, 20) }, (_, i) => ({ page: String(i + 1) }));
   } catch (err) {
     console.error("generateStaticParams failed:", err);
-    
+    // Fallback to generating first 5 pages
     return Array.from({ length: 5 }, (_, i) => ({ page: String(i + 1) }));
   }
 }
@@ -108,19 +146,7 @@ export default async function PostsPage({ params, searchParams }: PageProps) {
     if (tag) apiParams.set("tag", tag);
     if (sortBy) apiParams.set("sortBy", sortBy);
 
-    const res = await fetch(
-      `${getBaseUrl()}/api/blogs?${apiParams.toString()}`,
-      {
-        next: { revalidate: 300 },
-        cache: 'no-store' 
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-
-    const data: BlogsResponse = await res.json();
+    const data = await fetchBlogs(apiParams);
 
     if (data.success) {
       blogs = data.data.blogs;
