@@ -55,21 +55,34 @@ function getBaseUrl() {
   if (process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_APP_URL) {
     return process.env.NEXT_PUBLIC_APP_URL;
   }
-  return "http://localhost:3000";
+  return "http://127.0.0.1:3000";
 }
 
 export async function generateStaticParams() {
+  if (process.env.NODE_ENV === "production" || !process.env.NEXT_PUBLIC_APP_URL) {
+    return Array.from({ length: 10 }, (_, i) => ({ page: String(i + 1) }));
+  }
+
   try {
     const res = await fetch(
-      `${getBaseUrl()}/api/blogs?status=published&page=1&limit=${blogsPerPage}`
+      `${getBaseUrl()}/api/blogs?status=published&page=1&limit=${blogsPerPage}`,
+      {
+        cache: 'no-store' 
+      }
     );
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
     const data: BlogsResponse = await res.json();
     const totalPages = data?.data?.totalPages ?? 1;
 
     return Array.from({ length: totalPages }, (_, i) => ({ page: String(i + 1) }));
   } catch (err) {
     console.error("generateStaticParams failed:", err);
-    return [{ page: "1" }];
+    
+    return Array.from({ length: 5 }, (_, i) => ({ page: String(i + 1) }));
   }
 }
 
@@ -98,9 +111,14 @@ export default async function PostsPage({ params, searchParams }: PageProps) {
     const res = await fetch(
       `${getBaseUrl()}/api/blogs?${apiParams.toString()}`,
       {
-        next: { revalidate: 300 }
+        next: { revalidate: 300 },
+        cache: 'no-store' 
       }
     );
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
 
     const data: BlogsResponse = await res.json();
 
@@ -114,7 +132,7 @@ export default async function PostsPage({ params, searchParams }: PageProps) {
     }
   } catch (err) {
     console.error("Error fetching blogs:", err);
-    error = "Error fetching blogs";
+    error = "Error fetching blogs. Please try again later.";
   }
 
   const basePath = "/posts/1";
