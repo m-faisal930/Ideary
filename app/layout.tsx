@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Auth App",
-  description: "A simple authentication app using Next.js, MongoDB, and JWT",
+  title: "Ideary",
+  description: "A blogging platform to share your ideas with the world.",
 };
 
 export default function RootLayout({

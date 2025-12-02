@@ -8,15 +8,15 @@ if (!MONGODB_URI) {
   );
 }
 
-// Define a type for cached connection
+
 interface MongooseCache {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
 }
 
-// Extend Node's global type
+
 declare global {
-  // eslint-disable-next-line no-var
+
   var mongoose: MongooseCache | undefined;
 }
 

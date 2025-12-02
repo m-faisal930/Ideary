@@ -7,6 +7,7 @@ import { toast, Bounce } from "react-toastify";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 type FormValues = {
   username: string;
@@ -60,7 +61,7 @@ export default function Signup() {
           href="/"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900"
         >
-          Authontication App
+          <Image src="/logo.png" alt="logo" width={200} height={200} />
         </Link>
         <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

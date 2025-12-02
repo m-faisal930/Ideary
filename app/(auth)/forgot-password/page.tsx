@@ -6,6 +6,8 @@ import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 
 type FormValues = {
   email: string;
@@ -49,7 +51,7 @@ export default function ForgotPasswordPage() {
           href="/"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
         >
-          Authontication App
+                    <Image src="/logo.png" alt="logo" width={200} height={200} />
         </Link>
         <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
           <Link

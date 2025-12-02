@@ -1,7 +1,7 @@
-import { createSuccessResponse } from "@/utils/apiResponse";
+import { apiResponse } from "../../../../utils/apiResponse";
 
 export async function POST() {
-  const response = createSuccessResponse("Logged out successfully");
+  const response = apiResponse({ success: true, message: "Logged out successfully" });
   response.cookies.set("token", "", { maxAge: 0 });
   return response;
 }

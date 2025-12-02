@@ -1,8 +1,42 @@
-# Auth-Module
+# IdearyKey Features
+- Multi-user system — anyone can sign up, write, and share articles.
 
-A compact authentication module built with Next.js (App Router) and MongoDB. It provides signup/login/logout, password reset (email via Resend), change-password, and a protected profile page. The project is intended as a drop-in auth example or a lightweight starting point for apps.
+- Rich text editor — publish your ideas in a distraction-free writing experience.
+
+- **✨ AI-powered blog generation** — automatically generate blog content using Google Gemini AI.
+
+- Comment & Like system — readers can interact, appreciate, and discuss posts.
+
+- User profiles — explore other writers' pages and their published works.
+
+- Discover feed — browse trending and recent posts from the community.
+
+- Dashboard for creators — manage articles, edit drafts, and track engagement.
+
+- Secure authentication — JWT or Firebase-based auth to protect user data.
+
+- Modern UI/UX — clean, responsive design inspired by Medium's simplicity.modern publishing platform built for thinkers, writers, and dreamers.
+It allows users to create accounts, publish their stories, and share ideas with a global community — much like Medium, but with a cleaner interface and more creator-focused tools.
 
 Deployed: https://auth-module-theta.vercel.app/
+
+
+Key Features
+- Multi-user system — anyone can sign up, write, and share articles.
+
+- Rich text editor — publish your ideas in a distraction-free writing experience.
+
+- Comment & Like system — readers can interact, appreciate, and discuss posts.
+
+- User profiles — explore other writers’ pages and their published works.
+
+- Discover feed — browse trending and recent posts from the community.
+
+- Dashboard for creators — manage articles, edit drafts, and track engagement.
+
+- Secure authentication — JWT or Firebase-based auth to protect user data.
+
+- Modern UI/UX — clean, responsive design inspired by Medium’s simplicity.
 
 Key points
 - Next.js (App Router) with Route Handlers for API endpoints.
@@ -34,6 +68,7 @@ JWT_EXPIRY=7d             # optional, used for token expiry
 RESEND_API_KEY=your-resend-api-key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 MODE_ENV=development
+GEMINI_API_KEY=your-gemini-api-key  # required for AI blog generation
 ```
 
 Notes:
@@ -52,6 +87,24 @@ Environment variables required by the app
 - `JWT_EXPIRY` — (optional) token expiry like `7d`.
 - `RESEND_API_KEY` — API key for Resend (email sending).
 - `NEXT_PUBLIC_APP_URL` — base URL used to build links in emails (e.g. reset link).
+- `GEMINI_API_KEY` — Google Gemini API key for AI blog generation (get it from [Google AI Studio](https://makersuite.google.com/app/apikey)).
+
+## AI Blog Generation Feature
+
+This platform now includes AI-powered blog generation using Google's Gemini AI! 🎉
+
+**How to use:**
+1. Navigate to `/admin/blogs/new` (blog creation page)
+2. Click the "Generate with AI" button
+3. Describe what blog you want in the prompt
+4. AI generates title, content, description, and tags automatically
+5. Review and edit the generated content before publishing
+
+**Setup:**
+- Add `GEMINI_API_KEY` to your `.env.local` file
+- Get your free API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+
+📖 **Full documentation:** See [docs/AI_BLOG_GENERATION.md](./docs/AI_BLOG_GENERATION.md) for detailed setup and usage instructions.
 
 API endpoints (app/api/auth)
 
